@@ -2,26 +2,27 @@ pipeline {
     agent any
 
     environment {
-        VENV:'heroku_env'
+        VENV = 'heroku_env' // Fixed syntax: `=` instead of `:`
     }
 
     stages {
-        stage('Checkout Out') {
+        stage('Checkout Code') {
             steps {
-                git branch:'main' url:'https://github.com/imranworkspace/dj_herokuPro'
+                git branch: 'main', url: 'https://github.com/imranworkspace/dj_herokuPro.git' // Fixed keyword spacing
             }
         }
-        stage('SET up heroku_env'){
-            steps{
-                bat 'python -m venv %heroku_env%'
-                bat '%heroku_env%\\Scripts\\python -m pip install --upgrade pip'
-                bat '%heroku_env%\\Scripts\\pip install -r requirements.txt'
 
+        stage('Set up virtual environment') {
+            steps {
+                bat "python -m venv %VENV%"
+                bat "%VENV%\\Scripts\\python -m pip install --upgrade pip"
+                bat "%VENV%\\Scripts\\pip install -r requirements.txt"
             }
         }
-        stage('RUN the tests'){
-            steps{
-                bat '%heroku_env%\\Scripts\\python manage.py test'
+
+        stage('Run the tests') {
+            steps {
+                bat "%VENV%\\Scripts\\python manage.py test"
             }
         }
     }
