@@ -21,7 +21,7 @@ pipeline {
         }
         stage('RUN the tests'){
             steps{
-                bat '%heroku_env%\\Scripts\\python manage.py tests'
+                bat '%heroku_env%\\Scripts\\python manage.py test'
             }
         }
     }
