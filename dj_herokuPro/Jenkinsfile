@@ -1,0 +1,28 @@
+pipeline {
+    agent any
+
+    environment {
+        VENV:'heroku_env'
+    }
+
+    stages {
+        stage('Checkout Out') {
+            steps {
+                git branch:'main' url:'https://github.com/imranworkspace/dj_herokuPro'
+            }
+        }
+        stage('SET up heroku_env'){
+            steps{
+                bat 'python -m venv %heroku_env%'
+                bat '%heroku_env%\\Scripts\\python -m pip install --upgrade pip'
+                bat '%heroku_env%\\Scripts\\pip install -r requirements.txt'
+
+            }
+        }
+        stage('RUN the tests'){
+            steps{
+                bat '%heroku_env%\\Scripts\\python manage.py tests'
+            }
+        }
+    }
+}
